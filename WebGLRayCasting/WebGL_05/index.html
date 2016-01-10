@@ -1,0 +1,146 @@
+﻿<!DOCTYPE HTML>
+
+<html>
+  <head>      
+     <title>TRL 3D</title>
+
+      <script id="shader-vs" type="x-shader/x-vertex">
+
+// NB: These must be the same for vertex and fragment shaders
+precision mediump float;
+precision mediump int;
+
+attribute vec3 aVertexPosition; 
+attribute vec2 aTextureCoord; 
+attribute vec4 aColourAttribute;
+
+uniform mat4 uMVMatrix; 
+uniform mat4 uPMatrix; 
+uniform int hasTexture;
+
+varying vec2 vTextureCoord; 
+varying vec4 vColourAttribute;
+varying vec4 vWorldInterpolatedPosition;
+
+void main(void) { 
+  gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+  vWorldInterpolatedPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+  // Draw colour or texture
+  if (hasTexture == 1) {
+    vTextureCoord = aTextureCoord; 
+  }
+  else {
+    vColourAttribute = aColourAttribute;
+  }
+}
+
+      </script>
+
+      <script id="shader-fs" type="x-shader/x-fragment">
+
+// NB: These must be the same for vertex and fragment shaders
+precision mediump float;
+precision mediump int;
+
+const float rulerHalfWidth = 0.05;
+const float rulerFarClip = 20.0;
+
+uniform vec3 uEyePosition;
+uniform int uIsCameraBox;
+
+varying vec2 vTextureCoord; 
+varying vec4 vColourAttribute;
+varying vec4 vWorldInterpolatedPosition;
+
+uniform sampler2D uSampler;
+uniform int hasTexture;
+
+/*
+  Get the intersection point of the vector v going from e 
+  through plane p with equation Ax + By + Cz = D, with
+  ABCD = p[0]p[1]p[2]p[3]. 4th component of retval indicates
+  whether vector is parrallel to plane: 0 = parrallel, 1.0 = not
+*/
+vec4 getPlaneIntersectionPoint(vec3 v, vec3 e, vec4 p) 
+{
+  float denum = (p[0]*v.x + p[1]*v.y + p[2]*v.z);
+  if (denum == 0.0) return vec4(0.0, 0.0, 0.0, 0.0);
+  else 
+  {
+    float t = (p[3] - p[0]*e.x - p[1]*e.y - p[2]*e.z) / denum;
+    vec3 intersectPoint = e + t*v;
+    // If t is negative, the intersection point lies in the opposite direction of the lookvector
+    if (t < 0.0) return vec4(0.0,0.0,0.0,0.0);
+    return vec4(intersectPoint, 1.0);
+  }
+}
+
+bool MustDrawRuler() {
+  // Calculate where the camera is pointing to
+  vec3 lookVector = normalize(vWorldInterpolatedPosition.xyz - uEyePosition);
+  // Draw the xz-plane as a grid/ruler
+  vec4 intersectPoint = getPlaneIntersectionPoint(lookVector, uEyePosition, vec4(0.0,1.0,0.0,0.0));
+  bool mustDrawGrid = intersectPoint[3] == 1.0;
+  // Test if current point being drawn if in front of or behind the ruler
+  mustDrawGrid = mustDrawGrid && (uIsCameraBox == 1 || (length(intersectPoint.xyz - uEyePosition.xyz) < length(vWorldInterpolatedPosition.xyz - uEyePosition)));
+  if (!mustDrawGrid) {
+    return false;
+  }
+  else {
+    return (abs(floor(intersectPoint.x) - intersectPoint.x) < rulerHalfWidth
+        || abs(ceil(intersectPoint.x) - intersectPoint.x) < rulerHalfWidth
+        || abs(floor(intersectPoint.z) - intersectPoint.z) < rulerHalfWidth
+        || abs(ceil(intersectPoint.z) - intersectPoint.z) < rulerHalfWidth)
+        // Clip ruler draw distance
+        &&  length(intersectPoint.xyz - uEyePosition.xyz) < rulerFarClip;
+  }
+}
+
+void main(void)
+{ 
+  // Draw ruler
+  bool drawRuler = MustDrawRuler();
+  if (!drawRuler && uIsCameraBox == 1) discard;
+  if (drawRuler) {
+    gl_FragColor = vec4(0.9,0.9,0.9,1.0);
+    return;
+  }
+  // Render scene
+	if (hasTexture == 1) {
+		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t)); 
+	}
+	else {
+		gl_FragColor = vColourAttribute;
+	}
+}
+
+      </script>
+
+      <script src="Scripts/Utils.js"></script>
+      <script src="Scripts/jquery-1.9.0.min.js"></script>
+      <script src="Scripts/gl-matrix-min.js"></script>
+      <script src="Scripts/Shaders.js"></script>
+      <script src="Scripts/Texture.js"></script>
+      <script src="Scripts/VertexBuffer.js"></script>
+      <script src="Scripts/TriangleVertexBuffer.js"></script>
+      <script src="Scripts/TriangleStripVertexBuffer.js"></script>
+      <script src="Scripts/Viewport.js"></script>
+      <script src="Scripts/Main.js"></script>      
+      <link href="Styles/main.css" rel="stylesheet"/>
+  </head>
+
+  <body>
+    <h1>TRL 3D</h1>    
+    <canvas id="glcanvas" width="1024" height="786"></canvas>
+    <br />
+    <small>Licence: GPL version 3, Wikus Coetser, 2013. This code uses <a href="http://glmatrix.net/">GL Matrix</a> and <a href="http://jquery.com/">jQuery</a>.</small>
+    <pre>
+W = Forward
+A = Turn Left
+S = Backward
+D = Turn Right
+R = Move Up
+F = Move Down
+    </pre>
+  </body>
+</html>

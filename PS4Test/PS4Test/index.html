@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>PS4 Browser Test</title>
+    <script src="main.js" ></script>
+</head>
+<body>
+  <p>Select Test:</p>
+  <div>
+    <input type="radio" name="rdbTest" value="iterate" id="rdbTestIterate" checked>
+    <label for="iterate">Iterations test</label>
+  </div>
+  <div>
+    <input type="radio" name="rdbTest" value="input" id="rdbTestInput">
+    <label for="rdb">Input test</label>
+  </div>
+  <div>
+    <input type="radio" name="rdbTest" value="canvasRequestAnim" id="rdbTestCanvas">
+    <label for="rdb">Canvas test (RequestAnimFrame)</label>
+  </div>
+  <div>
+    <input type="radio" name="rdbTest" value="canvasIterate" id="rdbTestCanvasFixedFrameRate">
+    <label for="rdb">Canvas test (setTimeout, 1 ms delay)</label>
+  </div>
+  <p><em>* Warning: Test may slow down your console, use at own risk or wait for it to complete.</em></p>
+  <input type="button" id="btnRun" value="Run" style="display:block"/>
+  <br>
+  <div id="divOut" style="padding:5px; font-size:smaller; min-height:400px">Nothing run yet ...</div>
+</body>
+</html>

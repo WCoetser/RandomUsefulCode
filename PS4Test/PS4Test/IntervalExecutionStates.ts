@@ -1,0 +1,5 @@
+﻿
+enum IntervalExecutionState {
+  Ready,
+  Processing
+}

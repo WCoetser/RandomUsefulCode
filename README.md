@@ -1,0 +1,1 @@
+I dump stuff here that I reference on my blog, and which is not part of something bigger at this time. 
