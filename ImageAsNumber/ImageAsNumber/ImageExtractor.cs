@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ImageAsNumber {
-    
+namespace ImageAsNumber
+{
+
     /// <summary>
     /// Warning: Extreme inefficiency ... do not use in production system
     /// </summary>

@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AB6A30B0-9A72-45DF-A623-96D73BAAD589}</ProjectGuid>
+    <ProjectGuid>{0A86CB76-1096-499C-BAB5-AE7B27AAD4E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GMP</RootNamespace>
-    <AssemblyName>GMP</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>BigFastInteger</RootNamespace>
+    <AssemblyName>BigFastInteger</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -58,15 +58,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GMP\GmpInteger.cs" />
+    <Compile Include="GMP\GmpInteger.Operators.cs" />
+    <Compile Include="GMP\Interop.cs" />
+    <Compile Include="GMP\mpz_t.cs" />
+    <Compile Include="ObjectLifeCycleManagement\DisposeContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BigFastInteger.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="libgmp-10.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GMP\GmpInteger.Functions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GMP\GmpInteger.Comparison.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,17 +1,15 @@
 ﻿using GMP;
 using ObjectLifeCycleManagement;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ImageAsNumber {
+namespace ImageAsNumber
+{
     class Program {        
 
         static void Main(string[] args) {
+
+            // === NB: COMPILE IN 64-bit MODE ===
 
             using (new DisposeContext()) {
             
@@ -23,7 +21,8 @@ namespace ImageAsNumber {
                 // Rhs
                 var img2 = Image.FromFile(@"C:\Downloads\Mountains\Edged-Mountains-landscape-mountain-1920x1080.jpg");
                 var raw2 = ImageExtractor.GetImageAsRaw(img2);
-                var rhs = new GmpInteger(raw2);
+
+                var rhs = new GmpInteger(raw2);               
 
                 var combined = (lhs + rhs) / new GmpInteger("2");
                 bool isNegative = false;

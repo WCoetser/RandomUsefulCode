@@ -53,9 +53,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BigFastInteger">
-      <HintPath>..\GMP\BigFastInteger.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -78,9 +75,9 @@
     <Content Include="4pixels.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GMP\GMP.csproj">
-      <Project>{ab6a30b0-9a72-45df-a623-96d73baad589}</Project>
-      <Name>GMP</Name>
+    <ProjectReference Include="..\BigFastInteger\BigFastInteger.csproj">
+      <Project>{0a86cb76-1096-499c-bab5-ae7b27aad4e4}</Project>
+      <Name>BigFastInteger</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
